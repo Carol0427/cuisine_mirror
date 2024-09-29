@@ -5,7 +5,7 @@ export async function ScrapeMenuItems(url) {
   let items = [];
 
   try {
-    const browser = await playwright.chromium.launch({ headless: false });
+    const browser = await playwright.chromium.launch({ headless: true });
     const context = await browser.newContext();
     const page = await context.newPage();
 

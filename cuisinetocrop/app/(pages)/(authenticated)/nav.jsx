@@ -5,8 +5,8 @@ import Link from "next/link";
 
 const Menus = [
   { title: "Dashboard", src: "Chart_fill", href: "/Dashboard" },
-  { title: "Accounts", src: "User", href: "/Account" },
-  { title: "Logout", src: "LogOut", href: "/LogOut" },
+  { title: "Account", src: "User", href: "/Account" },
+  // { title: "Logout", src: "LogOut", href: "/LogOut" },
 ];
 
 export default function Nav({ isMobile }) {

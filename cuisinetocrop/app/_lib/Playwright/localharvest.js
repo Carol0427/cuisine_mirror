@@ -1,10 +1,10 @@
-import { chromium } from 'playwright';
+const playwright = require('playwright');
 
 async function fetchFarmingPageHtml() {
   let browser = null;
   try {
     // Launch the browser
-    browser = await chromium.launch({ headless: false });
+    const browser = await playwright.chromium.launch({ headless: true });
     const context = await browser.newContext();
     const page = await context.newPage();
 

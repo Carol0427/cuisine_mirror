@@ -5,18 +5,19 @@ export async function ScrapeMenuItems(url) {
   let items = [];
 
   try {
-    const browser = await playwright.chromium.launch();
+    const browser = await playwright.chromium.launch({ headless: false });
     const context = await browser.newContext();
     const page = await context.newPage();
-    
+
     await page.goto(url);
     await page.waitForTimeout(15000);
-    
+
     const itemSelector = 'li[data-test^="store-item-"]';
     items = await page.$$eval(itemSelector, (elements) => {
       return elements.map(el => {
         const titleEl = el.querySelector('[data-testid="rich-text"]');
-        const descriptionEl = el.querySelector('.p7');
+        // Select any of the potential class names for description
+        const descriptionEl = el.querySelector('.p5, .p6, .p7, .p8, .p4, .p3, .p2, .p1, .p9');
         
         return {
           title: titleEl ? titleEl.textContent.trim() : null,

@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 
-async function fetchFarmingPageHtml() {
+async function fetchFarmingPageHtml(zipCode, ingredient) {
   let browser = null;
   try {
     // Launch the browser
@@ -12,8 +12,8 @@ async function fetchFarmingPageHtml() {
     await page.goto('https://www.localharvest.org/plantation-fl/olives', { timeout: 30000 });
 
     // Fill in the search fields
-    await page.fill("#search-text", 'Olive');  // Enter produce type (e.g., 'eggs')
-    await page.fill('#search-near', '33064'); // Enter ZIP code (e.g., '33064')
+    await page.fill("#search-text", ingredient);  // Enter produce type (e.g., 'eggs')
+    await page.fill('#search-near', zipCode); // Enter ZIP code (e.g., '33064')
 
     // Click the search button (ensure this selector points to the actual button)
     await page.click('#search-form > span.searchglasswrap > span'); // Adjust this selector if necessary

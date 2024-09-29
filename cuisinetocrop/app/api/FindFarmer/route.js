@@ -1,9 +1,12 @@
 import fetchHtmlFromLocalHarvest from '@/app/_lib/Playwright/localharvest.js';
 
-export async function GET() {
+export async function GET(req) {
   try {
     // Fetch the name of the first good instead of the HTML content
-    const firstGoodName = await fetchHtmlFromLocalHarvest();
+    const { searchParams } = new URL(req.url);
+    const zipCode = searchParams.get('zipCode');
+    const ingredient = searchParams.get('ingredient');
+    const firstGoodName = await fetchHtmlFromLocalHarvest(zipCode, ingredient);
 
     // Log the first good name
     console.log('First Good Name:', firstGoodName);

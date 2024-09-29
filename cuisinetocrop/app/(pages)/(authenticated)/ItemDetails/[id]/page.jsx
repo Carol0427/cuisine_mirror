@@ -6,7 +6,8 @@ const ItemDetails = ({ params }) => {
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [zipCode, setZipCode] = useState(null);
-  const [farmerData, setFarmerData] = useState(null); // To store farmer data
+  const [farmerData, setFarmerData] = useState({});
+  const [loadingFarmers, setLoadingFarmers] = useState({});
 
   useEffect(() => {
     const fetchZipCode = async () => {
@@ -15,7 +16,7 @@ const ItemDetails = ({ params }) => {
         if (response.ok) {
           const data = await response.json();
           if (data && typeof data.zipCode === "number") {
-            setZipCode(data.zipCode); // Save zip code
+            setZipCode(data.zipCode);
             console.log("Zip code:", data.zipCode);
           } else {
             console.error("Invalid zip code format");
@@ -54,7 +55,9 @@ const ItemDetails = ({ params }) => {
     const fetchIngredients = async (title, description) => {
       try {
         const response = await fetch(
-          `/api/GetIngredients?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
+          `/api/GetIngredients?title=${encodeURIComponent(
+            title
+          )}&description=${encodeURIComponent(description)}`
         );
         if (response.ok) {
           const ingredientsData = await response.json();
@@ -77,9 +80,9 @@ const ItemDetails = ({ params }) => {
       }
     };
 
-    fetchZipCode(); // Fetch zip code when component mounts
+    fetchZipCode();
     fetchItemDetails();
-  }, [params.itemID]);
+  }, [params.id]);
 
   const findNearestFarm = async (ingredient) => {
     try {
@@ -88,18 +91,37 @@ const ItemDetails = ({ params }) => {
         return;
       }
 
-      console.log("Finding farm for ingredient:", ingredient, "in zip code:", zipCode);
-      const response = await fetch(`/api/FindFarmer?zipCode=${zipCode}&ingredient=${encodeURIComponent(ingredient)}`);
+      setLoadingFarmers((prev) => ({ ...prev, [ingredient]: true }));
+
+      console.log(
+        "Finding farm for ingredient:",
+        ingredient,
+        "in zip code:",
+        zipCode
+      );
+      const response = await fetch(
+        `/api/FindFarmer?zipCode=${zipCode}&ingredient=${encodeURIComponent(
+          ingredient
+        )}`
+      );
       if (response.ok) {
-        const farmerData = await response.json();
-        console.log("Farmer data:", farmerData);
-        setFarmerData(farmerData.goodName); // Save farmer data
-        console.log(farmerData);
+        const data = await response.json();
+        console.log("Farmer data:", data);
+        if (data.goodName) {
+          setFarmerData((prevState) => ({
+            ...prevState,
+            [ingredient]: data.goodName,
+          }));
+        } else {
+          console.error("Unexpected response format from FindFarmer API");
+        }
       } else {
         console.error("Failed to find farmer");
       }
     } catch (error) {
       console.error("Error finding nearest farm:", error);
+    } finally {
+      setLoadingFarmers((prev) => ({ ...prev, [ingredient]: false }));
     }
   };
 
@@ -130,12 +152,23 @@ const ItemDetails = ({ params }) => {
                   className="flex justify-between items-center p-2 border border-[#40C9A2] rounded-md"
                 >
                   <span className="text-[#02254D]">{ingredient}</span>
-                  <button
-                    className="bg-[#40C9A2] text-white px-4 py-2 rounded-md text-sm hover:bg-[#02254D] transition duration-300"
-                    onClick={() => findNearestFarm(ingredient)} // Call API on click
-                  >
-                    Find Nearest Farm
-                  </button>
+                  {farmerData[ingredient] ? (
+                    <span className="text-[#40C9A2] font-semibold">
+                      {farmerData[ingredient]}
+                    </span>
+                  ) : loadingFarmers[ingredient] ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#40C9A2]"></div>
+                      <span className="ml-2 text-[#40C9A2]">Loading...</span>
+                    </div>
+                  ) : (
+                    <button
+                      className="bg-[#40C9A2] text-white px-4 py-2 rounded-md text-sm hover:bg-[#02254D] transition duration-300"
+                      onClick={() => findNearestFarm(ingredient)}
+                    >
+                      Find Nearest Farm
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -145,14 +178,6 @@ const ItemDetails = ({ params }) => {
                 <p>Your Zip Code: {zipCode}</p>
               </div>
             )}
-
-          
-              <div className="mt-4 text-center">
-                <h3 className="text-xl font-semibold text-[#02254D] mb-3">
-                  Nearest Farm for Ingredient:
-                </h3>
-                <p>{farmerData}</p>
-              </div>
           </div>
         ) : (
           <p className="text-center mt-6 text-[#02254D]">

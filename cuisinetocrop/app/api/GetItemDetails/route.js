@@ -1,3 +1,6 @@
+import { findItemById } from '../../_lib/mongo/utils/getitemdetails'
+import { NextResponse } from 'next/server'
+
 export async function GET(req) {
     const url = new URL(req.url);
     const id = url.searchParams.get("id"); // Extract the item ID from query parameters

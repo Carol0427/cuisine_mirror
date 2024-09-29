@@ -1,45 +1,38 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Globe, MapPin } from "lucide-react";
 
-// Mock GetIngredients function (Replace with actual logic to get ingredients)
-const GetIngredients = (itemID) => {
-  // Mock adding ingredients to the item
-  console.log(`Fetching ingredients for item ID: ${itemID}`);
-  return ["Tomatoes", "Onions", "Peppers"]; // Example ingredients
-};
-
 const ItemDetails = () => {
-  const [itemID, setItemID] = useState(""); // State for itemID input
-  const [item, setItem] = useState(null); // State to store item details
-  const [loading, setLoading] = useState(false); // Loading state
+  const [itemID, setItemID] = useState("");
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [ingredientsData, setIngredientsData] = useState([]);
+  const [ingredientsList, setIngredientsList] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+
   const router = useRouter();
 
-  // Get itemID from query parameters when the component mounts
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
-    const id = query.get("id"); // Get the item ID from the query parameter
+    const id = query.get("id");
     if (id) {
       fetchItemDetails(id);
     }
   }, []);
 
-  // Function to fetch item details from the API
   const fetchItemDetails = async (id) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/items?id=${id}`); // Fetch using query parameter
+      const response = await fetch(`/api/GetItemDetails?id=${id}`);
       if (response.ok) {
         const data = await response.json();
-
-        // Check if ingredients are empty and call GetIngredients if needed
-        if (data.ingredients.length === 0) {
-          const ingredients = GetIngredients(data.itemID);
-          data.ingredients = ingredients; // Update ingredients array
+        setItem(data);
+        console.log(data);
+        
+        // After fetching item details, fetch ingredients
+        if (data.title && data.description) {
+          await fetchIngredients(data.title, data.description);
         }
-
-        setItem(data); // Set the item data
       } else {
         console.error("Item not found");
       }
@@ -49,10 +42,32 @@ const ItemDetails = () => {
     setLoading(false);
   };
 
-  // Handle form submission
+  const fetchIngredients = async (title, description) => {
+    try {
+      const response = await fetch(`/api/GetIngredients?title=${title}&description=${description}`);
+      if (response.ok) {
+        const ingredientsData = await response.json();
+        console.log(ingredientsData);
+        if (typeof ingredientsData.ingredients === 'string') {
+          const parsedIngredients = ingredientsData.ingredients
+            .split(';')
+            .map(ingredient => ingredient.trim())
+            .filter(ingredient => ingredient !== ''); // Remove any empty strings
+          
+          console.log("Parsed ingredients:", parsedIngredients);
+          setIngredients(parsedIngredients);
+        setIngredients(ingredientsData.ingredients || []);
+      } else {
+        console.error("Ingredients not found");
+      }
+    } catch (error) {
+      console.error("Error fetching ingredients:", error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.push(`?id=${itemID}`); // Navigate with query parameter
+    router.push(`?id=${itemID}`);
   };
 
   return (
@@ -63,10 +78,7 @@ const ItemDetails = () => {
         </h1>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label
-              htmlFor="itemID"
-              className="block mb-2 font-medium text-[#02254D]"
-            >
+            <label htmlFor="itemID" className="block mb-2 font-medium text-[#02254D]">
               <Globe className="inline-block w-5 h-5 mr-2" />
               Item ID
             </label>
@@ -89,7 +101,6 @@ const ItemDetails = () => {
           </button>
         </form>
 
-        {/* Display item details */}
         {loading && (
           <p className="text-center mt-6 text-[#02254D]">Loading...</p>
         )}
@@ -102,7 +113,7 @@ const ItemDetails = () => {
               {item.description}
             </p>
             <ul className="space-y-2">
-              {item.ingredients.map((ingredient, index) => (
+              {ingredients.map((ingredient, index) => (
                 <li
                   key={index}
                   className="flex justify-between items-center p-2 border border-[#40C9A2] rounded-md"
@@ -120,5 +131,5 @@ const ItemDetails = () => {
     </div>
   );
 };
-
+}
 export default ItemDetails;

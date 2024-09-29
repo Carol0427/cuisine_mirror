@@ -1,6 +1,8 @@
 import { GetIngredients } from '../../_lib/OpenAI/getingredients';
 import { NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -10,10 +12,6 @@ export async function GET(req) {
     if (!title || !description) {
       return NextResponse.json({ error: 'Title and description are required' }, { status: 400 });
     }
-
-    // Remove quotes if they're present in the parameters
-    // const cleanTitle = title.replace(/^"|"$/g, '');
-    // const cleanDescription = description.replace(/^"|"$/g, '');
 
     const ingredients = await GetIngredients(title, description);
     console.log(ingredients);

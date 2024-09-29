@@ -93,7 +93,8 @@ const ItemDetails = ({ params }) => {
       if (response.ok) {
         const farmerData = await response.json();
         console.log("Farmer data:", farmerData);
-        setFarmerData(farmerData); // Save farmer data
+        setFarmerData(farmerData.goodName); // Save farmer data
+        console.log(farmerData);
       } else {
         console.error("Failed to find farmer");
       }
@@ -145,16 +146,13 @@ const ItemDetails = ({ params }) => {
               </div>
             )}
 
-            {farmerData && (
+          
               <div className="mt-4 text-center">
                 <h3 className="text-xl font-semibold text-[#02254D] mb-3">
                   Nearest Farm for Ingredient:
                 </h3>
-                <p>{farmerData.farmName}</p>
-                <p>{farmerData.farmAddress}</p>
-                <p>{farmerData.distance} miles away</p>
+                <p>{farmerData}</p>
               </div>
-            )}
           </div>
         ) : (
           <p className="text-center mt-6 text-[#02254D]">

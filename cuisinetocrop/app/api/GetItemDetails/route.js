@@ -8,7 +8,6 @@ export async function GET(req) {
     try {
       // Query the database to find the item by itemID
       const item = await findItemById(id);
-  
       if (!item) {
         return new Response(JSON.stringify({ error: "Item not found" }), {
           status: 404,

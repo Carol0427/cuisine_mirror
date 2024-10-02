@@ -1,9 +1,8 @@
-import React from 'react';
-import { useItemDetails } from './hooks/useItemDetails';
-import { useZipCode } from './hooks/useZipCode';
-import { useFarmers } from './hooks/useFarmers';
 import IngredientList from './components/IngredientList';
 import LoadingSpinner from './components/LoadingSpinner';
+import { useFarmers } from './hooks/useFarmers';
+import { useItemDetails } from './hooks/useItemDetails';
+import { useZipCode } from './hooks/useZipCode';
 
 const ItemDetails = ({ params }) => {
   const { item, ingredients, loading } = useItemDetails(params.id);

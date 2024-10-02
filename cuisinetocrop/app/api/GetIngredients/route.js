@@ -1,7 +1,7 @@
-import { GetIngredients } from '../../_lib/OpenAI/getingredients';
 import { NextResponse } from 'next/server';
-import { findItemById } from '../../_lib/mongo/utils/getitemdetails';
 import { AddIngredients } from '../../_lib/mongo/utils/addingredients';
+import { findItemById } from '../../_lib/mongo/utils/getitemdetails';
+import { GetIngredients } from '../../_lib/OpenAI/getingredients';
 
 export async function GET(req) {
   try {

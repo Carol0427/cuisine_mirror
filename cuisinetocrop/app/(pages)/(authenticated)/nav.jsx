@@ -4,18 +4,29 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import Link from "next/link";
 
 const Menus = [
-  { title: "Dashboard", src: "Chart_fill", href: "/Dashboard" },
-  { title: "Account", src: "User", href: "/Account" },
-  // { title: "Logout", src: "LogOut", href: "/LogOut" },
+  { title: "Dashboard", src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxheW91dC1kYXNoYm9hcmQiPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjkiIHg9IjMiIHk9IjMiIHJ4PSIxIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iNSIgeD0iMTQiIHk9IjMiIHJ4PSIxIi8+PHJlY3Qgd2lkdGg9IjciIGhlaWdodD0iOSIgeD0iMTQiIHk9IjEyIiByeD0iMSIvPjxyZWN0IHdpZHRoPSI3IiBoZWlnaHQ9IjUiIHg9IjMiIHk9IjE2IiByeD0iMSIvPjwvc3ZnPg==", href: "/Dashboard" },
+  { title: "Logout", src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWxvZy1vdXQiPjxwYXRoIGQ9Ik05IDIxSDVhMiAyIDAgMCAxLTItMlY1YTIgMiAwIDAgMSAyLTJoNCIvPjxwb2x5bGluZSBwb2ludHM9IjE2IDE3IDIxIDEyIDE2IDciLz48bGluZSB4MT0iMjEiIHgyPSI5IiB5MT0iMTIiIHkyPSIxMiIvPjwvc3ZnPg==", href: "/api/auth/logout" },
 ];
 
 export default function Nav({ isMobile }) {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleMouseEnter = () => {
+    if (!isMobile) {
+      setIsOpen(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isMobile) {
+      setIsOpen(false);
+    }
+  };
+
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const navClasses = `fixed top-0 left-0 h-screen bg-[#02254D] transition-all duration-300 ease-in-out z-50
+  const navClasses = `fixed top-0 left-0 h-screen bg-[#a7c957] transition-all duration-300 ease-in-out z-50
         ${
           isMobile
             ? isOpen
@@ -27,7 +38,7 @@ export default function Nav({ isMobile }) {
         }`;
 
   return (
-    <nav className={navClasses}>
+    <nav className={navClasses} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {isMobile && (
         <div className="h-16 flex items-center px-4">
           <button
@@ -42,56 +53,37 @@ export default function Nav({ isMobile }) {
       <div className="h-[calc(100%-4rem)] overflow-y-auto">
         <ul className="pt-4">
           {user && (
-            <li className="flex items-center px-4 py-2 mb-4 text-gray-300">
-              <img
-                src={user.picture}
-                className="w-12 h-12 rounded-full"
-                alt="User profile"
-              />
-              {isOpen && <span className="ml-4 text-lg">Profile</span>}
+            <li className="px-4 py-2 mb-4 text-[#386641]">
+              <Link
+                href="/Account"
+                 className="flex items-center w-full space-x-4"
+              >
+                <img
+                  src={user.picture}
+                  className="w-11 h-11 rounded-full"
+                  alt="User profile"
+                />
+                {isOpen && <span className="whitespace-nowrap text-lg">Profile</span>}
+              </Link>
             </li>
           )}
-          {Menus.map((menu, index) => (
+          {user && Menus.map((menu, index) => (
             <li key={index}>
               <Link
                 href={menu.href}
-                className="flex items-center px-4 py-2 mt-4 text-gray-300 cursor-pointer hover:bg-zinc-500"
+                className="flex items-center px-4 py-2 mt-4 text-[#386641] cursor-pointer hover:bg-zinc-500 rounded-md"
               >
                 <img
-                  className="w-12 h-12"
-                  src={`https://cdn-icons-png.flaticon.com/128/739/739249.png`}
+                  className="w-9 h-9 flex-shrink-0"
+                  src={menu.src}
                   alt={menu.title}
                 />
-                {isOpen && <span className="ml-4 text-lg">{menu.title}</span>}
+                {isOpen && <span className="ml-4 text-lg whitespace-nowrap">{menu.title}</span>}
               </Link>
             </li>
           ))}
-          {user && (
-            <li>
-              <Link
-                href="/api/auth/logout"
-                className="flex items-center px-4 py-2 mt-4 text-gray-300 cursor-pointer hover:bg-zinc-500"
-              >
-                <img
-                  className="w-12 h-12"
-                  src={`https://cdn-icons-png.flaticon.com/128/739/739249.png`}
-                  alt="Logout"
-                />
-                {isOpen && <span className="ml-4 text-lg">Logout</span>}
-              </Link>
-            </li>
-          )}
         </ul>
       </div>
-
-      {!isMobile && (
-        <button
-          onClick={toggleMenu}
-          className="absolute -right-5 top-16 bg-zinc-600 rounded-full p-2"
-        >
-          {isOpen ? "◀" : "▶"}
-        </button>
-      )}
     </nav>
   );
 }

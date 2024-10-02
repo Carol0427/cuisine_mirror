@@ -3,6 +3,8 @@ import { AddIngredients } from '../../_lib/mongo/utils/addingredients';
 import { findItemById } from '../../_lib/mongo/utils/getitemdetails';
 import { GetIngredients } from '../../_lib/OpenAI/getingredients';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -13,7 +15,6 @@ export async function GET(req) {
     if (!title || !description || !itemId) {
       return NextResponse.json({ error: 'Title, description, and itemId are required' }, { status: 400 });
     }
-
     console.log(`Processing request for item: ${itemId}`);
 
     const existingItem = await findItemById(itemId);

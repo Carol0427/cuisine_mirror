@@ -1,5 +1,8 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import IngredientList from './components/IngredientList';
+import LoadingSpinner from './components/LoadingSpinner';
+import { useFarmers } from './hooks/useFarmers';
+import { useItemDetails } from './hooks/useItemDetails';
+import { useZipCode } from './hooks/useZipCode';
 
 const ItemDetails = ({ params }) => {
   const [item, setItem] = useState(null);
@@ -188,5 +191,24 @@ const ItemDetails = ({ params }) => {
     </div>
   );
 };
+
+const ItemContent = ({ item }) => (
+  <div className="mt-6">
+    <h2 className="text-2xl font-bold text-center text-[#02254D] mb-4">{item.title}</h2>
+    <p className="text-center text-[#02254D] mb-4">{item.description}</p>
+  </div>
+);
+
+const NoItemFound = () => (
+  <p className="text-center mt-6 text-[#02254D]">
+    No item details found. Please check the URL parameters.
+  </p>
+);
+
+const ZipCodeDisplay = ({ zipCode }) => (
+  <div className="mt-4 text-center">
+    <p>Your Zip Code: {zipCode}</p>
+  </div>
+);
 
 export default ItemDetails;

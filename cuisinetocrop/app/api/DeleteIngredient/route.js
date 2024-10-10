@@ -1,6 +1,6 @@
 import { DeleteIngredient } from '../../_lib/Mongo/utils/deleteingredient';
 import { NextResponse } from 'next/server'
-
+//just for commit
 export async function DELETE(req, res) {
   try {
     const { searchParams } = new URL(req.url);

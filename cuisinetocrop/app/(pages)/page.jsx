@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const CuisineToCropHomepage = () => {
   return (
-    <div className="bg-gradient-to-b from-green-50 to-green-100 min-h-screen">
+    <div className="bg-[#f2e8cf] min-h-screen">
       <header className="bg-gradient-to-r from-green-800 to-green-700 text-white py-8 shadow-lg">
         <div className="container mx-auto px-4">
           <h1 className="text-5xl font-bold animate-fade-in-down">

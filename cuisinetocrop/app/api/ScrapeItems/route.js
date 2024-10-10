@@ -11,7 +11,7 @@ export async function GET(req) {
 
   try {
     const menu_items = await ScrapeMenuItems(url);
-    // console.log("API route received menu items:", menu_items);
+   console.log("API route received menu items:", menu_items);
     return NextResponse.json(menu_items);
   } catch (error) {
     console.error("Error in API route:", error);

@@ -1,4 +1,4 @@
-import { findUserBySubId } from '../../_lib/mongo/utils/finduser'
+import { findUserBySubId } from '../../_lib/Mongo/utils/finduser'
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 export const GET = withApiAuthRequired(async function GET(req) {

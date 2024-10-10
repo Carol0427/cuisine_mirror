@@ -1,4 +1,4 @@
-import { GetItemsByUserId } from '../../_lib/mongo/utils/getitemsbyuid'
+import { GetItemsByUserId } from '../../_lib/Mongo/utils/getitemsbyuid'
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 export const GET = withApiAuthRequired(async function GET(req) {

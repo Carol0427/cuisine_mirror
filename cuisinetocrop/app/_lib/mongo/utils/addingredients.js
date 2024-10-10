@@ -11,8 +11,11 @@ export async function AddIngredients(ingredients, itemID) {
       throw new Error(`Item with ID: ${itemID} not found`);
     }
 
+    // Check if ingredients is a string and convert it to an array if necessary
+    const ingredientsArray = typeof ingredients === 'string' ? [ingredients] : ingredients;
+
     // Add the ingredients to the item's ingredients list
-    item.ingredients = [...item.ingredients, ...ingredients];
+    item.ingredients = [...item.ingredients, ...ingredientsArray];
 
     // Save the updated item
     const updatedItem = await item.save();

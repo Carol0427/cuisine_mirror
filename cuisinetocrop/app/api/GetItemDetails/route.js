@@ -1,4 +1,4 @@
-import { findItemById } from '../../_lib/mongo/utils/getitemdetails'
+import { findItemById } from '../../_lib/Mongo/utils/getitemdetails'
 import { NextResponse } from 'next/server'
 
 export async function GET(req) {
@@ -16,7 +16,7 @@ export async function GET(req) {
       }
   
       // Return the item details in the response
-      return new Response(JSON.stringify(item), {
+      return new NextResponse(JSON.stringify(item), {
         status: 200,
         headers: { "Content-Type": "application/json" },
       });

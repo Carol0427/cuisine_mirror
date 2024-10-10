@@ -7,12 +7,11 @@ export async function GET(req) {
   const ingredient = searchParams.get('ingredient');
 
   try {
-    const firstGoodName = await fetchFarmingPageHtml(zipCode, ingredient);
-    return NextResponse.json({ goodName: firstGoodName || 'Not found' });
+    const response = await fetchFarmingPageHtml(zipCode, ingredient);
+    console.log("WOW: ", response);
+    return NextResponse.json({ farmnlink: response || 'Not found' });
   } catch (error) {
     console.error('Error fetching the first good name:', error);
     return NextResponse.json({ error: 'Failed to fetch good name' }, { status: 500 });
   }
 }
-
-// export const dynamic = 'force-dynamic';

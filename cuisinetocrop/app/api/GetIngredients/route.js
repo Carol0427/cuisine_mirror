@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { AddIngredients } from '../../_lib/mongo/utils/addingredients';
-import { findItemById } from '../../_lib/mongo/utils/getitemdetails';
+import { AddIngredients } from '../../_lib/Mongo/utils/addingredients';
+import { findItemById } from '../../_lib/Mongo/utils/getitemdetails';
 import { GetIngredients } from '../../_lib/OpenAI/getingredients';
 
 export const dynamic = 'force-dynamic';
@@ -8,10 +8,9 @@ export const dynamic = 'force-dynamic';
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
+    const itemId = searchParams.get('itemid');
     const title = searchParams.get('title');
     const description = searchParams.get('description');
-    const itemId = searchParams.get('itemid');
-
     if (!title || !description || !itemId) {
       return NextResponse.json({ error: 'Title, description, and itemId are required' }, { status: 400 });
     }
@@ -19,19 +18,22 @@ export async function GET(req) {
 
     const existingItem = await findItemById(itemId);
     let ingredients;
-
+    let msg;
     if (!existingItem || !existingItem.ingredients || existingItem.ingredients.length === 0) {
       console.log(`No existing ingredients found for item ${itemId}. Generating new ingredients.`);
+      msg = "ingredients were not saved and had to get from ai";
       ingredients = await GetIngredients(title, description);
+      await AddIngredients(ingredients, itemId);
+      console.log(`Ingredients processed and saved for item ${itemId}`);
     } else {
+      msg = "got ingredients from mongo";
       console.log(`Using existing ingredients for item ${itemId}`);
       ingredients = existingItem.ingredients;
+      console.log("ingredients: ", ingredients);
     }
 
-    await AddIngredients(ingredients, itemId);
-    console.log(`Ingredients processed and saved for item ${itemId}`);
-
-    return NextResponse.json({ ingredients });
+    console.log("it worked!");
+    return NextResponse.json({ stuff: ingredients,  message: msg });
   } catch (error) {
     console.error("Error in GetIngredients API route:", error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

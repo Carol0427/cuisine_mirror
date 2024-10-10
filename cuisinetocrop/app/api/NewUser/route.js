@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
-import { AddNewUser } from "../../_lib/mongo/utils/addnewuser";
+import { AddNewUser } from "../../_lib/Mongo/utils/addnewuser";
 import { ScrapeMenuItems } from "@/app/_lib/Playwright/scrapemenuitems";
-import { AddNewItems } from "@/app/_lib/mongo/utils/addnewitems";
+import { AddNewItems } from "@/app/_lib/Mongo/utils/addnewitems";
 export const POST = withApiAuthRequired(async function NewUser(req) {
   try {
     // Get the session and user information
@@ -15,9 +15,7 @@ export const POST = withApiAuthRequired(async function NewUser(req) {
     // Extract the userID from the Auth0 sub
     
     console.log("User ID:", userID);
-    console.log("ssssssssssssssssssssssssssssssss")
     console.log(restaurantUrl)
-    console.log("ssssssssssssssssssssssssssssssss")
 
     // Validate the input
     if (!restaurantUrl || !zipCode) {

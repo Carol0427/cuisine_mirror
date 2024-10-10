@@ -1,16 +1,28 @@
 "use client";
-import { useState } from 'react';
-import Nav from './nav';
+import { useState, useEffect } from "react";
+import Nav from "./nav.jsx";
 
-export default function Layout({ children, isMobile }) {
+export default function DashboardLayout({ children }) {
+	const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <div className="flex">
-      <Nav isMobile={isMobile} isOpen={isOpen} setIsOpen={setIsOpen} />
-      <div className={`flex-grow transition-all duration-300 ease-in-out ${isOpen ? 'ml-60' : 'ml-20'}`}>
-        {children}
-      </div>
-    </div>
-  );
+	useEffect(() => {
+		const handleResize = () => setIsMobile(window.innerWidth < 768);
+		handleResize();
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+	return (
+		<div className="flex h-screen w-screen overflow-hidden">
+			<Nav isMobile={isMobile} />
+			<main
+				className={`flex-grow overflow-y-auto z-0 ${
+					isMobile ? "" : "ml-20"
+				}`}
+			>
+				{children}
+			</main>
+		</div>
+	);
 }

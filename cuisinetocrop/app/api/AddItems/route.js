@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { AddNewItems } from '../../_lib/mongo/utils/addnewitems';
+import { AddNewItems } from '../../_lib/Mongo/utils/addnewitems';
 import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 export const POST = withApiAuthRequired (async function AddItems(req) {

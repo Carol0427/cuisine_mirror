@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { User, Mail, Loader } from "lucide-react";
@@ -31,7 +30,7 @@ export default function Account() {
 
   return (
     user && (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center bg-gradient-to-b from-green-50 to-green-100 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
           <div className="md:flex">
             <div className="md:flex-shrink-0">
@@ -42,7 +41,7 @@ export default function Account() {
               />
             </div>
             <div className="p-8">
-              <div className="uppercase tracking-wide text-sm text-green-600 font-semibold mb-1">
+              <div className="uppercase tracking-wide text-sm text-[#02254D] font-semibold mb-1">
                 Account Information
               </div>
               <h2 className="block mt-1 text-lg leading-tight font-medium text-black">

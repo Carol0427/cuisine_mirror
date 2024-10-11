@@ -13,7 +13,7 @@ async function fetchFarmingPageHtml(zipCode, ingredient) {
     const page = await context.newPage();
 
     // Set a longer timeout for navigation (e.g., 90 seconds)
-    await page.goto('https://www.localharvest.org/', { timeout: 90000 });
+    await page.goto('https://www.localharvest.org/', { timeout: 180000 });
 
     // Wait for the search fields to be available
     await page.waitForSelector('#search-dropdown'), { state: 'visible', timeout: 15000 };

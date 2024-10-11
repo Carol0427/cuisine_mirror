@@ -8,7 +8,6 @@ async function fetchFarmingPageHtml(zipCode, ingredient) {
     console.log('Launching browser...');
     browser = await playwright.chromium.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     const context = await browser.newContext();
@@ -16,7 +15,6 @@ async function fetchFarmingPageHtml(zipCode, ingredient) {
 
     console.log('Navigating to LocalHarvest...');
     await page.goto('https://www.localharvest.org/', { 
-      timeout: 30000,
       waitUntil: 'networkidle'
     });
 

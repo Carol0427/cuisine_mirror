@@ -16,7 +16,7 @@ async function fetchFarmingPageHtml(zipCode, ingredient) {
 
     console.log('Navigating to LocalHarvest...');
     await page.goto('https://www.localharvest.org/', { 
-      timeout: 10000,
+      timeout: 30000,
       waitUntil: 'networkidle'
     });
 

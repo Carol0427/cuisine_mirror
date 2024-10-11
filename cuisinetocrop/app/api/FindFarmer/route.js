@@ -15,3 +15,4 @@ export async function GET(req) {
     return NextResponse.json({ error: 'Failed to fetch good name' }, { status: 500 });
   }
 }
+export const dynamic = 'force-dynamic'

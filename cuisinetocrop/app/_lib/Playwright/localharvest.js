@@ -5,10 +5,7 @@ async function fetchFarmingPageHtml(zipCode, ingredient) {
   let farmnlink = [];
   try {
     // Launch the browser with additional arguments for Linux
-    browser = await playwright.chromium.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-    });
+    browser = await playwright.chromium.launch({headless: true});
     const context = await browser.newContext();
     const page = await context.newPage();
 
